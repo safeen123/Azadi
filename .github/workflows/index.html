@@ -16,9 +16,7 @@
 </style>
 </head>
 <body>
-
 <h1>حاسبة استهلاك الكهرباء اليومية بالوات</h1>
-
 <table id="deviceTable">
     <thead>
         <tr>
@@ -58,24 +56,20 @@
         </tr>
     </tfoot>
 </table>
-
 <div class="button-row">
     <button onclick="addRow()">➕ إضافة جهاز جديد</button>
     <button onclick="deleteAllRows()">❌ حذف جميع الأجهزة</button>
     <button onclick="calculateMonthlyBill()">💰 احتساب الفاتورة الشهرية</button>
 </div>
-
 <script>
 function clearDefaultValue(input) {
     if (input.value === "0" || input.value === "30") {
         input.value = '';
     }
 }
-
 function addRow() {
     const table = document.getElementById("deviceTable").getElementsByTagName('tbody')[0];
     const newRow = document.createElement("tr");
-
     newRow.innerHTML = `
         <td>
             <select>
@@ -100,33 +94,27 @@ function addRow() {
     table.appendChild(newRow);
     calculateMonthlyBill();
 }
-
 function deleteRow(btn) {
     const row = btn.parentNode.parentNode;
     row.parentNode.removeChild(row);
     calculateMonthlyBill();
 }
-
 function deleteAllRows() {
     const tbody = document.getElementById("deviceTable").getElementsByTagName('tbody')[0];
     tbody.innerHTML = '';
     calculateMonthlyBill();
 }
-
 function calculateMonthlyBill() {
     const tbody = document.getElementById("deviceTable").getElementsByTagName('tbody')[0];
     const rows = tbody.getElementsByTagName('tr');
     let totalConsumption = 0;
-
     for (let row of rows) {
         const watts = parseFloat(row.cells[1].getElementsByTagName('input')[0].value) || 0;
         const hours = parseFloat(row.cells[2].getElementsByTagName('input')[0].value) || 0;
         const days = parseInt(row.cells[3].getElementsByTagName('input')[0].value) || 30;
-
         const kw = watts / 1000;
         totalConsumption += kw * hours * days;
     }
-
     // حساب تكلفة الفاتورة حسب الشرائح
     let total = 0;
     if (totalConsumption <= 400) {
@@ -140,14 +128,11 @@ function calculateMonthlyBill() {
     } else {
         total = 400*72 + 400*108 + 400*175 + 400*265 + (totalConsumption-1600)*350;
     }
-
     document.getElementById("totalResult").innerText = 
         `الاستهلاك الكلي: ${totalConsumption.toFixed(2)} كيلوواط/شهريًا | التكلفة: ${total.toLocaleString()} دينار`;
 }
-
 // احتساب أولي عند تحميل الصفحة
 calculateMonthlyBill();
 </script>
-
 </body>
 </html>
